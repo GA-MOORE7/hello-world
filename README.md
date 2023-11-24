@@ -12,7 +12,7 @@
 
 ## Key Features
 
-#### Users can enter their name and choose a background color for the chat screen before joining the chat.
+- #### Users can enter their name and choose a background color for the chat screen before joining the chat.
 
 #### A page displaying the conversation, as well as an input field and submit button.
 
