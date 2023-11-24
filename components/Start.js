@@ -22,13 +22,18 @@ const Screen1 = ({ navigation }) => {
     <View style={styles.container}>
 
       <ImageBackground source={imgBackground} style={styles.image}>
+        {/* app title: */}
         <Text style={styles.title}>Chatroom App</Text>
+
+        {/* when typing, makes the keyboard not hide input or information that would be behind it */}
         <KeyboardAvoidingView
           style={styles.container}
           behavior={Platform.OS === "android" ? "height" : "padding"}
           keyboardVerticalOffset={Platform.OS === "android" ? 0 : 0}
-        >          
+        > 
+        {/* container for input, color choice and button */}         
         <View style={styles.inputBox}>
+        {/* username input */}
         <TextInput
           style={styles.textInput}
           value={name}
@@ -38,24 +43,32 @@ const Screen1 = ({ navigation }) => {
         <View>
         <Text style={styles.chooseBgText}>Choose Background Color</Text>
         <View style={styles.colorButtonBox}>
+
+           {/* color 1 */}
           <TouchableOpacity
           style={[styles.colorButton, styles.colorInput1]}
           onPress={() => {
             setBackground(styles.colorInput1.backgroundColor);
           }}>            
           </TouchableOpacity>
+
+           {/* color 2 */}
           <TouchableOpacity
            style={[styles.colorButton, styles.colorInput2]}
            onPress={() => {
              setBackground(styles.colorInput2.backgroundColor);
            }}>
           </TouchableOpacity>
+
+           {/* color 3 */}
           <TouchableOpacity
           style={[styles.colorButton, styles.colorInput3]}
           onPress={() => {
             setBackground(styles.colorInput3.backgroundColor);
           }}>
           </TouchableOpacity>
+
+           {/* color 4 */}
           <TouchableOpacity
           style={[styles.colorButton, styles.colorInput4]}
           onPress={() => {
@@ -63,7 +76,9 @@ const Screen1 = ({ navigation }) => {
           }}>
           </TouchableOpacity>          
         </View>
-        </View>   
+        </View>  
+
+        {/* button to start chatting, links to chat.js */} 
         <TouchableOpacity 
           style={styles.button} 
           onPress={signInUser}>
@@ -81,8 +96,6 @@ const Screen1 = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //  justifyContent: 'center',
-    // alignItems: 'center'
   },
   image: {
     flex: 1,
@@ -131,7 +144,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   colorButtonBox: {
-    // justifyContent: "flex-start",
+    justifyContent: "flex-start",
     display: "flex",
     flexDirection: "row",
     width: "90%",
