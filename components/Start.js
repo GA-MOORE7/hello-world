@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   title: {
+    paddingTop: 50,
     fontSize: 45,
     fontWeight: "600",
     color: "white",
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     margin: 10,
     textAlign: "left",
     alignSelf: "flex-start",
-    marginLeft: 20,
+    marginLeft: 60,
   },
   colorButtonBox: {
     justifyContent: "flex-start",
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   colorInput1: {
-    backgroundColor: "#090C08",
+    backgroundColor: "#82b1b5",
   },
   colorInput2: {
     backgroundColor: "#474056",
