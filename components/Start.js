@@ -29,10 +29,12 @@ const Screen1 = ({ navigation }) => {
         <KeyboardAvoidingView
           style={styles.container}
           behavior={Platform.OS === "android" ? "height" : "padding"}
-          keyboardVerticalOffset={Platform.OS === "android" ? 0 : 0}
+          keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0}
         > 
+
         {/* container for input, color choice and button */}         
         <View style={styles.inputBox}>
+
         {/* username input */}
         <TextInput
           style={styles.textInput}
@@ -82,13 +84,12 @@ const Screen1 = ({ navigation }) => {
         <TouchableOpacity 
           style={styles.button} 
           onPress={signInUser}>
-          <Text>Press Here</Text>
+          <Text>Start Chatting</Text>
         </TouchableOpacity>
 
         </View>
         </KeyboardAvoidingView>
-      </ImageBackground>
-          
+      </ImageBackground>          
     </View>
   );
 }
@@ -96,6 +97,8 @@ const Screen1 = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // justifyContent: "space-around",
+        
   },
   image: {
     flex: 1,
@@ -113,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 250,
   },
   inputBox: {
-    flex: 1,
+    flex: 1,    
     height: "44%",
     width: "88%",
     backgroundColor: "white",
@@ -134,6 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     color: "#757083",
     opacity: 0.5,
+    
   },
   chooseBgText: {
     fontSize: 16,
@@ -154,7 +158,7 @@ const styles = StyleSheet.create({
   colorButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 20,    
   },
   colorInput1: {
     backgroundColor: "#82b1b5",
