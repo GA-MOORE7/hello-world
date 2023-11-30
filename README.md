@@ -27,4 +27,3 @@
 #### 2. Run npm install;
 
 #### 3. Download the expo app on your phone, or use an android emulator to test the app.
-
