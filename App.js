@@ -9,30 +9,51 @@ import Screen2 from './components/Chat';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+// initialize connection to Firestore
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+
+const Stack = createNativeStackNavigator();
+
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
+
 const App = () => {
   const [text, setText] = useState('');
+
+  // My web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDMznrUGxVuavM9ZWarOlue2-n25p9SDrc",
+    authDomain: "chat-app-4e65a.firebaseapp.com",
+    projectId: "chat-app-4e65a",
+    storageBucket: "chat-app-4e65a.appspot.com",
+    messagingSenderId: "254641003347",
+    appId: "1:254641003347:web:5ae7d8d2a11ac6a9c71fa6"
+  };
+  
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+   // Initialize Cloud Firestore and get a reference to the service
+   const db = getFirestore(app); 
 
    // alert the user input (`text` state's value)
    const alertMyText = () => {
     Alert.alert(text);
   }
 
-  const Stack = createNativeStackNavigator();
-
   return (
 
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Screen1"
-      >
-        <Stack.Screen
-          name="Start"
-          component={Screen1}
-        />
-        <Stack.Screen
-          name="Screen2"
-          component={Screen2}
-        />
+      <Stack.Navigator initialRouteName="Screen1">
+        <Stack.Screen name="Start" component={Screen1}></Stack.Screen>
+        <Stack.Screen name="Screen2">
+          {(props) => (
+            <Screen2
+              db={db}
+              {...props}
+            />
+          )}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
 

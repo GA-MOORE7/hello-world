@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Platform, ImageBackground, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Platform, ImageBackground, TouchableOpacity, KeyboardAvoidingView, Alert } from 'react-native';
+import { getAuth, signInAnonymously } from "firebase/auth";
 
 const imgBackground = require("../assets/bg-image.png");
 
@@ -7,15 +8,24 @@ const Screen1 = ({ navigation }) => {
   const [name, setName] = useState('');
   const [background, setBackground] = useState();
 
+  // initialized the Firebase authentication handler
+  const auth = getAuth();
+
+  //after user has been signed in anonymously, navigate to Chat, and pass this object to it (available there through route.params.color for ex.\)
   const signInUser = () => {
-    
-      //after user has been signed in anonymously, navigate to Chat, and pass this object to it (available there through route.params.color for ex.\)
-      
-        navigation.navigate("Screen2", {
-          color: background,
-          name: name,
-        });
-        
+
+    signInAnonymously(auth)    
+        .then(result => {
+            navigation.navigate("Screen2", {
+                      color: background,
+                      name: name,
+                      userID: result.user.uid 
+                    });
+            Alert.alert('Signed in Successfully!')
+          })
+          .catch((error) => {
+            Alert.alert('Unable to sign in, try later again.')
+        })         
       } 
 
   return (
