@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, View, TextInput, Text, Button, Alert, ScrollView } from 'react-native';
 
 // import the screens
@@ -11,7 +11,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // initialize connection to Firestore
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
+
+// NetInfo for Detecting a Network Connection
+import { useNetInfo } from '@react-native-community/netinfo';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,15 +35,29 @@ const App = () => {
     messagingSenderId: "254641003347",
     appId: "1:254641003347:web:5ae7d8d2a11ac6a9c71fa6"
   };
+
+  //connection status
+  const connectionStatus = useNetInfo();
+
+  //if user is not connected to the internet, disable trying to connect to the database
+  useEffect(() => {
+    if (connectionStatus.isConnected === false) {
+      Alert.alert("Connection Lost!");
+      disableNetwork(db);
+    } else if (connectionStatus.isConnected === true) {
+      enableNetwork(db);
+    }
+  }, [connectionStatus.isConnected]);
   
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
-   // Initialize Cloud Firestore and get a reference to the service
-   const db = getFirestore(app); 
 
-   // alert the user input (`text` state's value)
-   const alertMyText = () => {
-    Alert.alert(text);
+  // Initialize Cloud Firestore and get a reference to the service
+  const db = getFirestore(app); 
+
+  // alert the user input (`text` state's value)
+  const alertMyText = () => {
+  Alert.alert(text);
   }
 
   return (
@@ -50,6 +69,7 @@ const App = () => {
           {(props) => (
             <Screen2
               db={db}
+              isConnected={connectionStatus.isConnected}
               {...props}
             />
           )}

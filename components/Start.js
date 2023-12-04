@@ -39,7 +39,7 @@ const Screen1 = ({ navigation }) => {
         <KeyboardAvoidingView
           style={styles.container}
           behavior={Platform.OS === "android" ? "height" : "padding"}
-          keyboardVerticalOffset={Platform.OS === "android" ? -100 : 0}
+          keyboardVerticalOffset={Platform.OS === "android" ? -150 : 0}
         > 
 
         {/* container for input, color choice and button */}         

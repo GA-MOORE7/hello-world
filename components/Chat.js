@@ -1,32 +1,39 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
-import { GiftedChat, Bubble } from "react-native-gifted-chat";
-import { collection, orderBy, query, getDocs, addDoc, onSnapshot } from "firebase/firestore";
+import { GiftedChat, Bubble, InputToolbar  } from "react-native-gifted-chat";
+import { collection, orderBy, query, getDocs, addDoc, onSnapshot, disableNetwork, enableNetwork } from "firebase/firestore";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Screen2 = ({ route, navigation, db }) => {
+const Screen2 = ({ route, navigation, db, isConnected }) => {
   const { name } = route.params;
   const color = route.params.color;
   const { userID } = route.params;
   const [messages, setMessages] = useState([]);
 
+  let message;
+  // Title for the screen
   useEffect(() => {
     navigation.setOptions({ title: name });
-    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
-    const unsubMessages = onSnapshot(q, (docs) => {
-      let newMessages = [];
-      docs.forEach(doc => {
-        newMessages.push({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: new Date(doc.data().createdAt.toMillis())
+    if (isConnected === true) {
+      enableNetwork(db);
+      const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
+      message = onSnapshot(q,
+        async (documentSnapshot) => {
+          let newMessages = [];
+          documentSnapshot.forEach(doc => {
+            newMessages.push({ id: doc.id, ...doc.data(), createdAt: new Date(doc.data().createdAt.toMillis()) })
+          });
+          cacheMessages(newMessages);
+          setMessages(newMessages);
         })
-      })
-      setMessages(newMessages);
-    })
-    return () => {
-      if (unsubMessages) unsubMessages();
     }
-   }, []);
+    else {
+      loadCachedMessages();
+    }
+    return () => {
+      if (message) message();
+    }
+  }, []);
 
   const onSend = (newMessages) => {
     addDoc(collection(db, "messages"), newMessages[0])
@@ -46,11 +53,33 @@ const Screen2 = ({ route, navigation, db }) => {
     />
   }
 
+  // Function in order to hide input and send button for the chat when offline
+  const renderInputToolbar = (props) => {
+    if (isConnected) return <InputToolbar {...props} />;
+    else return null;
+   }
+
+  // Function to load messages from cashe if there is no connection
+  const loadCachedMessages = async () => {
+    const cashedMessages = await AsyncStorage.getItem("messages") || [];
+    setMessages(JSON.parse(cashedMessages));
+  }
+
+  // Function to save messages into cashe when connection in on
+  const cacheMessages = async (messagestoCash) => {
+    try {
+      await AsyncStorage.setItem('messages', JSON.stringify(messagestoCash));
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
  return (
    <View style={[styles.container, { flex: 1, backgroundColor: color }]}>
      <GiftedChat
       messages={messages}
       renderBubble={renderBubble}
+      renderInputToolbar={renderInputToolbar}
       onSend={messages => onSend(messages)}
       user={{
         _id: userID,
