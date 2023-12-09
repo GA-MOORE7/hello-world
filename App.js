@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Text, Button, Alert, ScrollView } from 'react-native';
+import { LogBox, Alert } from 'react-native';
 
 // import the screens
 import Screen1 from './components/Start';
@@ -9,6 +9,8 @@ import Screen2 from './components/Chat';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { getStorage } from "firebase/storage";
+
 // initialize connection to Firestore
 import { initializeApp } from "firebase/app";
 import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
@@ -16,12 +18,9 @@ import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore"
 // NetInfo for Detecting a Network Connection
 import { useNetInfo } from '@react-native-community/netinfo';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const Stack = createNativeStackNavigator();
 
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
+LogBox.ignoreLogs(["@firebase/auth: Auth"]);
 
 const App = () => {
   const [text, setText] = useState('');
@@ -54,6 +53,7 @@ const App = () => {
 
   // Initialize Cloud Firestore and get a reference to the service
   const db = getFirestore(app); 
+  const storage = getStorage(app);
 
   // alert the user input (`text` state's value)
   const alertMyText = () => {
@@ -70,6 +70,7 @@ const App = () => {
             <Screen2
               db={db}
               isConnected={connectionStatus.isConnected}
+              storage={storage}
               {...props}
             />
           )}

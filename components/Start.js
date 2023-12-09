@@ -14,7 +14,8 @@ const Screen1 = ({ navigation }) => {
   //after user has been signed in anonymously, navigate to Chat, and pass this object to it (available there through route.params.color for ex.\)
   const signInUser = () => {
 
-    signInAnonymously(auth)    
+    signInAnonymously(auth) 
+       
         .then(result => {
             navigation.navigate("Screen2", {
                       color: background,

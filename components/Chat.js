@@ -3,12 +3,35 @@ import { StyleSheet, View, Text, KeyboardAvoidingView, Platform } from 'react-na
 import { GiftedChat, Bubble, InputToolbar  } from "react-native-gifted-chat";
 import { collection, orderBy, query, getDocs, addDoc, onSnapshot, disableNetwork, enableNetwork } from "firebase/firestore";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
 
-const Screen2 = ({ route, navigation, db, isConnected }) => {
+const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
   const { name } = route.params;
   const color = route.params.color;
   const { userID } = route.params;
   const [messages, setMessages] = useState([]);
+
+  const renderCustomView = (props) => {
+    const { currentMessage} = props;
+    if (currentMessage.location) {
+      return (
+          <MapView
+            style={{width: 150,
+              height: 100,
+              borderRadius: 13,
+              margin: 3}}
+            region={{
+              latitude: currentMessage.location.latitude,
+              longitude: currentMessage.location.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
+      );
+    }
+    return null;
+  }
 
   let message;
   // Title for the screen
@@ -59,6 +82,10 @@ const Screen2 = ({ route, navigation, db, isConnected }) => {
     else return null;
    }
 
+   const renderCustomActions = (props) => {
+    return <CustomActions storage={storage} {...props} />;
+  };
+
   // Function to load messages from cashe if there is no connection
   const loadCachedMessages = async () => {
     const cashedMessages = await AsyncStorage.getItem("messages") || [];
@@ -81,6 +108,8 @@ const Screen2 = ({ route, navigation, db, isConnected }) => {
       renderBubble={renderBubble}
       renderInputToolbar={renderInputToolbar}
       onSend={messages => onSend(messages)}
+      renderActions={renderCustomActions}
+      renderCustomView={renderCustomView}
       user={{
         _id: userID,
           name: name
