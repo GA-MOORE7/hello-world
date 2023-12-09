@@ -10,6 +10,14 @@
 
 - #### Expo
 
+- #### Firebase (Firestore for message database and image storage)
+
+- #### React Navigation
+
+- #### Expo packages (async-storage, image-picker, location)
+
+- #### Native components for Android
+
 ## Key Features
 
 - #### Users can enter their name and choose a background color for the chat screen before joining the chat.
