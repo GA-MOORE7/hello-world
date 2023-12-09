@@ -34,17 +34,8 @@ import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
 
       const newUploadRef = ref(storage, 'image123');
 
-      const uploadAndSendImage = async (imageURI) => {
-        const uniqueRefString = generateReference(imageURI);
-        const newUploadRef = ref(storage, uniqueRefString);
-        const response = await fetch(imageURI);
-        const blob = await response.blob();
-        uploadBytes(newUploadRef, blob).then(async (snapshot) => {
-          const imageURL = await getDownloadURL(snapshot.ref)
-          onSend({ image: imageURL })
-        });
-      }
-
+      //allow the user to pick an image from their media library, and send it in the chat
+  
       const pickImage = async () => {
         let permissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (permissions?.granted) {
@@ -54,6 +45,8 @@ import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
         }
       }
 
+      //allow the user to take an image using the devices camera, and send it in the chat
+
       const takePhoto = async () => {
         let permissions = await ImagePicker.requestCameraPermissionsAsync();
         if (permissions?.granted) {
@@ -62,6 +55,8 @@ import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
           else Alert.alert("Permissions haven't been granted.");
         }
       }
+
+      //allow the user to share their location, and send it in the chat
 
       const getLocation = async () => {
         let permissions = await Location.requestForegroundPermissionsAsync();
@@ -77,6 +72,21 @@ import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
           } else Alert.alert("Error occurred while fetching location");
         } else Alert.alert("Permissions haven't been granted.");
       }
+
+      //assign a unique reference string to an image, upload it, and then send it in the chat
+      
+      const uploadAndSendImage = async (imageURI) => {
+        const uniqueRefString = generateReference(imageURI);
+        const newUploadRef = ref(storage, uniqueRefString);
+        const response = await fetch(imageURI);
+        const blob = await response.blob();
+        uploadBytes(newUploadRef, blob).then(async (snapshot) => {
+          const imageURL = await getDownloadURL(snapshot.ref)
+          onSend({ image: imageURL })
+        });
+      }
+      
+      //generate a unique reference string for each image uploaded and sent
 
       const generateReference = (uri) => {
         const timeStamp = (new Date()).getTime();
