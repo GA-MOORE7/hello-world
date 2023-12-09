@@ -30,8 +30,10 @@
 
 ## Test it Yourself
 
-#### 1. Clone this Github project into a new folder;
+#### 1. Clone this Github project into a new folder: git clone https://github.com/GA-MOORE7/hello-world.git
 
-#### 2. Run npm install;
+#### 2. Navigate to the project direcctory: cd hello-world
 
-#### 3. Download the expo app on your phone, or use an android emulator to test the app.
+#### 3. Install dependencies: npm install
+
+#### 4. Download the expo app on your phone, or use an android emulator to test the app
