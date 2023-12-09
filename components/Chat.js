@@ -1,3 +1,4 @@
+ //imports
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar  } from "react-native-gifted-chat";
@@ -6,11 +7,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import CustomActions from './CustomActions';
 import MapView from 'react-native-maps';
 
+// main
+
 const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
+
+// states
+
   const { name } = route.params;
   const color = route.params.color;
   const { userID } = route.params;
   const [messages, setMessages] = useState([]);
+
+// functions
 
   const renderCustomView = (props) => {
     const { currentMessage} = props;
@@ -34,6 +42,7 @@ const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
   }
 
   let message;
+
   // Title for the screen
   useEffect(() => {
     navigation.setOptions({ title: name });
@@ -100,6 +109,8 @@ const Screen2 = ({ route, navigation, db, isConnected, storage }) => {
       console.log(error.message);
     }
   }
+
+// return
 
  return (
    <View style={[styles.container, { flex: 1, backgroundColor: color }]}>
